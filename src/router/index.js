@@ -5,34 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-
-/* Router Modules */
-// import componentsRouter from './modules/components'
-// import chartsRouter from './modules/charts'
-// import tableRouter from './modules/table'
-// import nestedRouter from './modules/nested'
-
-/**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
- *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
- * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar
-    noCache: true                if set true, the page will no be cached(default is false)
-    affix: true                  if set true, the tag will affix in the tags-view
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
- */
-
+import Book from './../views/book/create.vue'
 /**
  * constantRoutes
  * a base page that does not have permission requirements
@@ -89,8 +62,28 @@ export const constantRoutes = [
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
  */
-export const asyncRoutes = [
+export const asyncRoutes = [ // 只有管理员才能访问
   /** when your routing map is too long, you can split it into small modules **/
+  {
+    path: '/book',
+    component: Layout,
+    redirect: '/book/create',
+    meta: {
+      title: '图书管理',
+      icon: 'documentation'
+    },
+    children: [
+      {
+        path: '/book/create',
+        component: () => import('@/views/book/create.vue'),
+        meta: {
+          title: '上传图书',
+          icon: 'edit',
+          roles: ['admin']
+        }
+      }
+    ]
+  },
   {
     path: '/error',
     component: Layout,
